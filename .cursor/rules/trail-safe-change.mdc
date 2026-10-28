@@ -1,0 +1,10 @@
+---
+description: "Trail Safe Change: analyze before coding, test, and report."
+alwaysApply: true
+---
+# Trail Safe Change / managed project rule
+For code changes or reviews, follow the instructions in the global skill
+`~/.agents/skills/trail-safe-change/SKILL.md` and the project's `AGENTS.md`.
+Inspect Trail graph, dependencies and learnings before edits. Respect all existing rules.
+Make minimal changes, test, run `trail check` when available, and report impacts and risks.
+Never claim a tool ran unless it actually ran. Do not deploy or push without approval.

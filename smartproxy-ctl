@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+ACTION="${1:-}"
+case "$ACTION" in
+  start)
+    SRC="${2:-}"
+    [[ -f "$SRC" && ! -L "$SRC" ]] || exit 2
+    # Only import config from invoking user's own home directory.
+    CALLER="${PKEXEC_UID:-}"
+    [[ "$CALLER" =~ ^[0-9]+$ ]] || exit 2
+    OWNER=$(stat -c %u "$SRC")
+    [[ "$OWNER" == "$CALLER" ]] || exit 2
+    TMP=$(mktemp /etc/smartproxy/.check.XXXXXXXX.json)
+    trap 'rm -f "$TMP"' EXIT
+    install -o root -g root -m 600 -- "$SRC" "$TMP"
+    /usr/bin/sing-box check -c "$TMP"
+    install -o root -g root -m 600 -- "$TMP" /etc/smartproxy/config.json
+    systemctl restart smartproxy.service
+    ;;
+  stop) systemctl stop smartproxy.service ;;
+  restart) systemctl restart smartproxy.service ;;
+  *) exit 2 ;;
+esac

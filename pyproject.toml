@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "smartproxy-linux"
+version = "0.8.0b0"
+requires-python = ">=3.10"
+dependencies = ["PySide6>=6.6"]
+[project.scripts]
+smartproxy = "smartproxy.cli:main"
+[tool.setuptools.packages.find]
+include = ["smartproxy*"]
